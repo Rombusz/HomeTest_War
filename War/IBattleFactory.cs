@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace War.War
 {
-    internal interface IWarFactory
+    internal interface IBattleFactory
     {
-        IWar CreateWar();
+        IBattle CreateBattle();
     }
 }

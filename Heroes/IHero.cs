@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace War.Heroes
 {
-    internal interface IHero
+    public interface IHero
     {
         Guid Id { get; }
         uint Health { get; }

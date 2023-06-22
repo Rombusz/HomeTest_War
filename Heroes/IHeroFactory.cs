@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace War.Heroes
 {
-    internal interface IHeroFactory
+    public interface IHeroFactory
     {
         enum HeroType
         {
@@ -16,6 +16,8 @@ namespace War.Heroes
         }
 
         IHero Create(HeroType type);
+
+        IHero CreateRandomHero();
 
     }
 }

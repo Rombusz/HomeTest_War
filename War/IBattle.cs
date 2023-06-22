@@ -7,7 +7,7 @@ using War.Heroes;
 
 namespace War.War
 {
-    internal interface IWar
+    public interface IBattle
     {
         public bool IsFinished { get; }
         public uint Round { get; }
