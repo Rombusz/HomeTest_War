@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,9 @@ namespace War.War
 {
     public class Battle : IBattle
     {
-        private readonly IBattleParticipantSelector participantSelector;
+        private readonly ICombatParticipantSelector participantSelector;
+        private readonly ICombat combat;
+        private readonly ILogger logger;
 
         public bool IsFinished { get; private set; }
 
@@ -17,40 +20,48 @@ namespace War.War
 
         public IList<IHero> Heroes { get; private set; }
 
-        public Battle(IList<IHero> heroes, IBattleParticipantSelector participantSelector)
+        public Battle(IList<IHero> heroes, ICombatParticipantSelector participantSelector, ICombat combat, ILogger logger)
         {
             this.participantSelector = participantSelector ?? throw new ArgumentNullException(nameof(participantSelector));
-            
+            this.combat = combat ?? throw new ArgumentNullException(nameof(combat));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             IsFinished = false;
-            Round = 0;
+            Round = 1;
             Heroes = heroes;
         }
 
         public bool ExecuteNextRound()
         {
 
-            BattleParticipants participants = participantSelector.SelectParticipants(Heroes);
+            logger.Information(string.Empty);
+            logger.Information($"Round {Round}");
+
+            CombatParticipants participants = participantSelector.SelectParticipants(Heroes);
 
             IHero attacker = participants.Attacker;
             IHero defender = participants.Defender;
 
+            logger.Information($"Resting heros:");
+
             foreach (IHero hero in Heroes)
             {
-                if (hero != attacker && hero != defender)
+                if (hero != attacker && hero != defender && hero.IsAlive)
                 {
                     hero.Rest();
                 }
             }
 
-            //call attacker/defender functions on others
+            logger.Information($"Fighting heros:");
+
+            combat.CombatParticipants = participants;
+            combat.EvaluateCombat();
 
             Round++;
 
             IsFinished = Heroes.Count(hero => hero.IsAlive) <= 1;
 
             return IsFinished;
-        }
-       
+        }       
 
     }
 }

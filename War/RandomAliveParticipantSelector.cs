@@ -7,9 +7,9 @@ using War.Heroes;
 
 namespace War.War
 {
-    public class RandomAliveParticipantSelector : IBattleParticipantSelector
+    public class RandomAliveParticipantSelector : ICombatParticipantSelector
     {
-        public BattleParticipants SelectParticipants(IList<IHero> heroList)
+        public CombatParticipants SelectParticipants(IList<IHero> heroList)
         {
             IList<IHero> aliveHeroes = heroList.Where(hero => hero.IsAlive).ToList();
             var aliveHeroCount = aliveHeroes.Count();
@@ -19,7 +19,7 @@ namespace War.War
                 throw new ParticipantSelectorException($"Number of heroes alive: {aliveHeroCount} it should be 2 atleast.");
             }
 
-            BattleParticipants participants = new BattleParticipants();
+            CombatParticipants participants = new CombatParticipants();
 
             participants.Attacker = SelectAttacker(aliveHeroes);
             participants.Defender = SelectDefender(participants.Attacker, aliveHeroes);

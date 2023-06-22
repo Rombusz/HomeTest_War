@@ -7,16 +7,16 @@ using War.Heroes;
 
 namespace War.War
 {
-    public class BattleParticipants
+    public class CombatParticipants
     {
         public IHero Attacker { get; set; }
 
         public IHero Defender { get; set; }
     }
 
-    public interface IBattleParticipantSelector
+    public interface ICombatParticipantSelector
     {
-        BattleParticipants SelectParticipants(IList<IHero> heroList);
+        CombatParticipants SelectParticipants(IList<IHero> heroList);
 
     }
 }
